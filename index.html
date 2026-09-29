@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interpolador de Lagrange para Latencia en Microservicios | Métodos Numéricos</title>
+  <meta name="description" content="Aplicación web académica para la interpolación polinómica de Lagrange aplicada al cálculo y predicción de latencia en arquitecturas de microservicios según memoria asignada.">
+  <link rel="icon" type="image/svg+xml" href="assets/icon.svg">
+  <!-- Fuentes Google Fonts para estética científica de alta fidelidad tipográfica -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=STIX+Two+Text:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <main class="page-container">
+    
+    <!-- ENCABEZADO CIENTÍFICO / EDITORIAL -->
+    <header class="paper-header">
+      <div class="academic-metadata-bar">
+        <span class="institution-tag">Métodos Numéricos &bull; Ciclo Académico</span>
+        <span>Unidad: Interpolación Polinómica &bull; Algoritmo de Lagrange</span>
+        <span class="badge-code">Complejidad: O(n²)</span>
+      </div>
+
+      <div class="header-content-wrapper">
+        <img src="assets/icon.svg" alt="Ícono de interpolación de Lagrange" class="header-icon">
+        <div>
+          <h1 class="paper-title">Interpolador de Lagrange para Latencia en Microservicios</h1>
+          <p class="paper-subtitle">
+            Modelado matemático y estimación continua del tiempo de respuesta <var>y</var> (ms) en función de la memoria RAM asignada <var>x</var> (GB)
+            <span class="case-badge-inline">Caso Benchmark 4 Nodos</span>
+          </p>
+        </div>
+      </div>
+    </header>
+
+    <!-- CAJAS DE CONTEXTO TEÓRICO -->
+    <section class="theory-callout-grid" aria-label="Marco Teórico">
+      <article class="academic-callout">
+        <h2 class="callout-title">
+          <span>Definición Matemática del Teorema de Lagrange</span>
+        </h2>
+        <p class="callout-text">
+          Dados <var>n</var> + 1 nodos experimentales distintos <var>(x<sub>0</sub>, y<sub>0</sub>), (x<sub>1</sub>, y<sub>1</sub>), ..., (x<sub>n</sub>, y<sub>n</sub>)</var>, existe un único polinomio <var>P<sub>n</sub>(x)</var> de grado a lo sumo <var>n</var> que interpola exactamente los datos:
+        </p>
+        <div class="callout-formula-box">
+          <var>P<sub>n</sub>(x)</var> = &sum;<sub>k=0</sub><sup>n</sup> <var>y<sub>k</sub></var> <var>L<sub>k</sub>(x)</var>
+          &emsp;donde&emsp;
+          <var>L<sub>k</sub>(x)</var> = &prod;<sub>i &ne; k</sub> 
+          <span class="math-frac">
+            <span class="math-num"><var>x</var> &minus; <var>x<sub>i</sub></var></span>
+            <span class="math-den"><var>x<sub>k</sub></var> &minus; <var>x<sub>i</sub></var></span>
+          </span>
+        </div>
+      </article>
+
+      <article class="academic-callout complexity-card">
+        <h2 class="callout-title">Propiedades y Restricciones</h2>
+        <div class="complexity-item">
+          <span>Condición de no colisión:</span>
+          <span class="badge-code"><var>x<sub>i</sub></var> &ne; <var>x<sub>j</sub></var> (&forall; i &ne; j)</span>
+        </div>
+        <div class="complexity-item">
+          <span>Complejidad algorítmica:</span>
+          <span class="badge-code">O(n²) operaciones</span>
+        </div>
+        <div class="complexity-item">
+          <span>Evaluación polinómica:</span>
+          <span class="badge-code">Esquema de Horner O(n)</span>
+        </div>
+        <div class="complexity-item">
+          <span>Partición de la unidad:</span>
+          <span class="badge-code">&sum; L<sub>k</sub>(x) &equiv; 1</span>
+        </div>
+      </article>
+    </section>
+
+    <!-- ÁREA PRINCIPAL: FORMULARIO Y RESULTADOS -->
+    <section class="main-two-columns">
+      
+      <!-- COLUMNA IZQUIERDA: FORMULARIO DE ENTRADA -->
+      <div class="academic-card">
+        <div class="academic-card-header">
+          <h2 class="academic-card-title">
+            <span>Datos Experimentales de Entrada</span>
+          </h2>
+          <span id="nodesCountBadge" class="nodes-counter-label">4 nodos (Grado 3)</span>
+        </div>
+
+        <div class="academic-card-body">
+          <div class="table-toolbar">
+            <span class="text-muted" style="font-size: 13px;">Tabla de puntos de calibración:</span>
+            <div class="btn-group-sm">
+              <button type="button" id="btnAddNode" class="btn-secondary btn-sm" title="Agregar nuevo nodo experimental">+ Agregar Nodo</button>
+              <button type="button" id="btnResetCase" class="btn-secondary btn-sm" title="Restablecer caso original del enunciado">Restablecer Caso (4)</button>
+            </div>
+          </div>
+
+          <form id="lagrangeForm" novalidate>
+            <table class="academic-table" id="nodesTable">
+              <thead>
+                <tr>
+                  <th style="width: 25%;">Nodo</th>
+                  <th style="width: 35%;">Memoria <var>x<sub>i</sub></var> (GB)</th>
+                  <th style="width: 35%;">Latencia <var>y<sub>i</sub></var> (ms)</th>
+                  <th style="width: 5%;"></th>
+                </tr>
+              </thead>
+              <tbody id="nodesTableBody">
+                <!-- Se puebla dinámicamente con JavaScript -->
+              </tbody>
+            </table>
+
+            <div class="eval-input-group">
+              <label for="inputXEval" class="eval-label-title">
+                Memoria a evaluar para estimación (<var>x<sub>eval</sub></var>):
+              </label>
+              <div class="eval-input-flex">
+                <input type="number" id="inputXEval" class="eval-input" value="6" step="any" min="0" required>
+                <span class="eval-unit">GB de RAM</span>
+              </div>
+            </div>
+
+            <div class="button-row">
+              <button type="submit" id="btnCalculate" class="btn-primary">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"></path>
+                  <path d="M6 6h10"></path>
+                  <path d="M6 10h10"></path>
+                  <path d="M6 14h7"></path>
+                </svg>
+                Calcular Interpolación
+              </button>
+            </div>
+
+            <!-- Caja de errores de validación -->
+            <div id="validationAlert" class="validation-errors-box" role="alert">
+              <h5>Inconsistencia en los datos de entrada:</h5>
+              <ul id="validationErrorsList"></ul>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- COLUMNA DERECHA: RESULTADOS DESTACADOS -->
+      <div>
+        <div class="results-hero-box" id="heroResultBox">
+          <div class="results-hero-grid">
+            <div>
+              <div class="hero-metric-label">Latencia Estimada Interpolada</div>
+              <div class="hero-metric-value">
+                <span id="metricValue">55.25</span>
+                <span class="hero-metric-unit">ms</span>
+              </div>
+              <div class="hero-metric-context" id="metricContext">
+                Evaluado para una asignación de memoria de <strong id="metricXEval">6</strong> GB de RAM
+              </div>
+            </div>
+
+            <div class="polynomial-result-box">
+              <div class="polynomial-label">Polinomio Interpolador Estándar:</div>
+              <div class="polynomial-rendered-equation" id="polynomialRendered">
+                <var>P</var><sub>3</sub>(<var>x</var>) = − 0.223958<var>x</var><sup>3</sup> + 7.09375<var>x</var><sup>2</sup> − 68.791667<var>x</var> + 261
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- GRÁFICA CIENTÍFICA EN CANVAS NATIVO -->
+        <div class="academic-card">
+          <div class="academic-card-header">
+            <h2 class="academic-card-title">
+              <span>Visualización Gráfica Continua del Modelo</span>
+            </h2>
+            <span class="badge-code" id="chartStatusBadge">Canvas HTML5 Nativo</span>
+          </div>
+
+          <div class="academic-card-body" style="padding-bottom: 14px;">
+            <div class="chart-container-box">
+              <canvas id="lagrangeCanvas" class="chart-canvas" width="600" height="420" aria-label="Gráfica de interpolación de Lagrange para latencia versus memoria"></canvas>
+            </div>
+
+            <div class="chart-legend-academic">
+              <div class="legend-item">
+                <span class="legend-marker-node"></span>
+                <span>Nodos experimentales (<var>x<sub>i</sub>, y<sub>i</sub></var>)</span>
+              </div>
+              <div class="legend-item">
+                <span class="legend-marker-curve"></span>
+                <span>Polinomio continuo <var>P(x)</var></span>
+              </div>
+              <div class="legend-item">
+                <span class="legend-marker-eval"></span>
+                <span>Punto interpolado (<var>x<sub>eval</sub>, P(x<sub>eval</sub>)</var>)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN: DESARROLLO TEÓRICO PASO A PASO (RF-04) -->
+    <section class="academic-card" id="theoreticalDevelopmentSection">
+      <div class="academic-card-header">
+        <h2 class="academic-card-title">
+          <span>Desarrollo Teórico y Expansión Algebraica Detallada</span>
+        </h2>
+        <span class="badge-code">Derivación Manual</span>
+      </div>
+
+      <div class="academic-card-body">
+        <p class="callout-text" style="margin-bottom: 16px;">
+          A continuación se presenta el cálculo algebraico riguroso de cada uno de los polinomios base <var>L<sub>k</sub>(x)</var>, sus denominadores correspondientes <var>d<sub>k</sub> = &prod;<sub>i &ne; k</sub> (x<sub>k</sub> &minus; x<sub>i</sub>)</var> y su expansión en potencias canónicas para obtener la forma estándar.
+        </p>
+
+        <!-- Contenedor dinámico de las tarjetas de cada base L_k(x) -->
+        <div id="basePolynomialsContainer"></div>
+
+        <!-- Sección de evaluación paso a paso en x_eval -->
+        <h3 class="academic-card-title" style="margin: 24px 0 12px 0; font-size: 16px;">
+          Sustitución Numérica Paso a Paso en <var>x</var> = <span id="evalStepXLabel">6</span> GB
+        </h3>
+
+        <div id="evaluationBreakdownContainer"></div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN: VERIFICACIÓN TEÓRICA Y CONSISTENCIA NUMÉRICA (PRUEBAS 1 A 4) -->
+    <section class="academic-card" id="verificationSection">
+      <div class="academic-card-header">
+        <h2 class="academic-card-title">
+          <span>Verificación Teórica y Consistencia Numérica</span>
+        </h2>
+        <span class="badge-code">Tolerancia &epsilon; = 10<sup>&minus;7</sup></span>
+      </div>
+
+      <div class="academic-card-body">
+        <p class="callout-text" style="margin-bottom: 16px;">
+          Comprobación matemática automatizada en tiempo de ejecución de las propiedades analíticas del polinomio interpolador:
+        </p>
+
+        <div class="verification-grid" id="verificationGrid">
+          <!-- Se puebla con las 4 pruebas del motor matemático -->
+        </div>
+      </div>
+    </section>
+
+    <!-- PIE DE PÁGINA EDITORIAL -->
+    <footer class="paper-footer">
+      <div>
+        <strong>Interpolador Polinómico de Lagrange</strong> &bull; Análisis Numérico y Rendimiento de Sistemas
+      </div>
+      <div class="footer-citations">
+        Referencia teórica: Burden, R. L., &amp; Faires, J. D. <em>Numerical Analysis</em>. Algoritmo estándar en &Omicron;(n²).
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- MÓDULOS JAVASCRIPT EN ORDEN DE DEPENDENCIA -->
+  <script src="js/validation.js"></script>
+  <script src="js/lagrange.js"></script>
+  <script src="js/formatter.js"></script>
+  <script src="js/chart.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
