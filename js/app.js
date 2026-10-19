@@ -91,7 +91,9 @@
       dom.nodesTableBody.appendChild(tr);
     });
 
-    dom.nodesCountBadge.textContent = `${total} nodos (Polinomio Grado ${total - 1})`;
+    if (dom.nodesCountBadge) {
+      dom.nodesCountBadge.textContent = `${total} nodos (Polinomio Grado ${total - 1})`;
+    }
   }
 
   /**
@@ -267,15 +269,18 @@
       });
     }
 
-    // 7. Ejecutar y renderizar Suite de Verificación Teórica (Pruebas 1 a 4)
-    const verificaciones = window.LagrangeCore.ejecutarVerificacionTeorica(resultado);
-    renderizarVerificaciones(verificaciones);
+    // 7. Ejecutar y renderizar Suite de Verificación Teórica (si el contenedor está presente)
+    if (dom.verificationGrid) {
+      const verificaciones = window.LagrangeCore.ejecutarVerificacionTeorica(resultado);
+      renderizarVerificaciones(verificaciones);
+    }
   }
 
   /**
    * Renderiza el estado de las 4 pruebas de verificación matemática.
    */
   function renderizarVerificaciones(pruebas) {
+    if (!dom.verificationGrid) return;
     dom.verificationGrid.innerHTML = '';
 
     pruebas.forEach(p => {
